@@ -25,40 +25,15 @@ export const DayWiseGraph = (props) => {
       {
         backgroundColor: "#3F51B5",
         barPercentage: 0.5,
-        barThickness: 12,
+        barThickness: 30,
         borderRadius: 4,
         categoryPercentage: 0.5,
-        data: [18, 5, 19, 27, 29, 19, 20],
+        data: [],
         label: "",
-        maxBarThickness: 10,
+        maxBarThickness: 30,
       },
     ],
-    labels: [
-      "00:00",
-      "01:00",
-      "02:00",
-      "03:00",
-      "04:00",
-      "05:00",
-      "06:00",
-      "07:00",
-      "08:00",
-      "09:00",
-      "10:00",
-      "11:00",
-      "12:00",
-      "13:00",
-      "14:00",
-      "15:00",
-      "16:00",
-      "17:00",
-      "18:00",
-      "19:00",
-      "20:00",
-      "21:00",
-      "22:00",
-      "23:00",
-    ],
+    labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
   });
 
   const options = {
@@ -108,65 +83,74 @@ export const DayWiseGraph = (props) => {
       mode: "index",
       titleFontColor: theme.palette.text.primary,
     },
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
   };
-  const [parsedData, setParsedData] = useState([]);
-  function toJson(filepath) {
-    return new Promise((resolve, reject) => {
-      Papa.parse(filepath, {
-        header: true,
-        complete(results) {
-          setParsedData(results.data);
-        },
-      });
+  const filterData = async () => {
+    // extract data for that day
+    // get a week before that current day as start time
+    const startTime = new Date();
+    startTime.setDate(startTime.getDate() - 7);
+    //  console.log(startTime);
+    const timeInterval = 60 * 2;
+    // endTime is one day after startTime
+    // set end time to two days ahead
+    const endTime = new Date();
+    // console.log(startTime);
+    // console.log(endTime);
+    const url = `https://api.thingspeak.com/channels/1864037/feeds.json?api_key=IVVRQR3FGHLBA96G&start=${startTime.toISOString()}&end=${endTime.toISOString()}&timezone=Asia%2FKolkata`;
+    const [data1] = await Promise.all([fetch(url)]).then(async ([res]) => {
+      const data1 = await res.json();
+      return [data1];
     });
-  }
-  useEffect(() => {
-    // give code to read data from csv file
+    //console.log(data1);
+    const dataValue = data1.feeds.map((feed) => feed.field1);
+    const timeFrame = data1.feeds.map((feed) => feed.created_at);
+    let data = [];
+    // map monday to 0 and sunday to 6
+    for (let i = 0; i < 7; i++) {
+      data.push(0);
+    }
+    for (let i = 0; i < timeFrame.length; i++) {
+      let date = new Date(timeFrame[i]);
+      let day = date.getDay();
+      if (dataValue[i] === null) continue;
+      let value = Number(dataValue[i]);
+      value = (value * timeInterval) / 1000;
+      value = value.toFixed(2);
+      data[day] += Number(value);
+      // data[hour] = data[hour].toFixed(2);
+    }
 
-    const f = async () => {
-      // await for papa parse
-
-      const data1 = await toJson("data.csv");
-
-      //   const result = await Papa.parse("data.csv", {
-      //     header: true,
-      //     skipEmptyLines: true,
-      //     complete: function (results) {
-      //       // Parsed Data Response in array format
-      //       setParsedData(results.data);
-      //     },
-      //   });
-      console.log(parsedData);
-      // go through the data
-      let dayWiseValue = [];
-      let dayWiseCount = [];
-      let data = [];
-      for (let i = 0; i < parsedData.length; i++) {
-        //  console.log(parsedData[i].day);
-      }
-      setData({
-        datasets: [
-          {
-            backgroundColor: "#3F51B5",
-            barPercentage: 0.5,
-            barThickness: 40,
-            borderRadius: 4,
-            categoryPercentage: 0.5,
-            data: data,
-            label: "",
-            maxBarThickness: 30,
-          },
-        ],
-        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-      });
-    };
-
-    f();
+    //console.log(data);
+    // set data in datasets
+    setData({
+      datasets: [
+        {
+          backgroundColor: "#66ff99",
+          barPercentage: 0.5,
+          barThickness: 40,
+          borderRadius: 4,
+          categoryPercentage: 0.5,
+          data: data,
+          label: "",
+          maxBarThickness: 30,
+        },
+      ],
+      labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    });
+  };
+  React.useEffect(() => {
+    filterData();
   }, []);
+
   return (
     <Card {...props}>
       <CardHeader
-        title="DAY-WISE VOLUME FLOW DURING LAST WEEK"
+        title="DAY-WISE VOLUME FLOW DURING LAST WEEK (L)"
         style={{ backgroundColor: "#39ac73", color: "white" }}
       />
       <Divider />

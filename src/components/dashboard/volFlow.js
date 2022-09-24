@@ -88,9 +88,10 @@ export const VolFlow = () => {
   const [finalData, setFinalData] = React.useState({
     datasets: [
       {
-        backgroundColor: "#003300",
+        backgroundColor: "#b3e6ff",
         barPercentage: 0.5,
         barThickness: 12,
+        fill: true,
         borderRadius: 4,
         categoryPercentage: 0.5,
         data: [],
@@ -117,41 +118,15 @@ export const VolFlow = () => {
     if (e) setTimeRange({ ...timeRange, endTime: e });
     else setTimeRange({ ...timeRange, endTime: new Date() });
   };
-
-  // const data = {
-  //   datasets: [
-  //     {
-  //       backgroundColor: "#3F51B5",
-  //       barPercentage: 0.5,
-  //       barThickness: 12,
-  //       borderRadius: 4,
-  //       categoryPercentage: 0.5,
-  //       data: [18, 5, 19, 27, 29, 19, 20],
-  //       label: "This year",
-  //       maxBarThickness: 10,
-  //     },
-  //     {
-  //       backgroundColor: "#EEEEEE",
-  //       barPercentage: 0.5,
-  //       barThickness: 12,
-  //       borderRadius: 4,
-  //       categoryPercentage: 0.5,
-  //       data: [11, 20, 12, 29, 30, 25, 13],
-  //       label: "Last year",
-  //       maxBarThickness: 10,
-  //     },
-  //   ],
-  //   labels: ["1 Aug", "2 Aug", "3 Aug", "4 Aug", "5 Aug", "6 Aug", "7 aug"],
-  // };
   const filterData = async () => {
     // get data from start and end time
     const timeInterval = 10 * 60;
-    const url = `https://api.thingspeak.com/channels/1864037/feeds.json?api_key=IVVRQR3FGHLBA96G&results=8000&average=10`;
+    const url = `https://api.thingspeak.com/channels/1864037/feeds.json?api_key=IVVRQR3FGHLBA96G&average=10&start=${timeRange.startTime.toISOString()}&end=${timeRange.endTime.toISOString()}`;
     const [data1] = await Promise.all([fetch(url)]).then(async ([res]) => {
       const data1 = await res.json();
       return [data1];
     });
-   // console.log(data1);
+    // console.log(data1);
 
     const dataValue = data1.feeds.map((feed) => feed.field1);
     const timeFrame = data1.feeds.map((feed) => feed.created_at);
@@ -190,7 +165,7 @@ export const VolFlow = () => {
 
   return (
     <Card>
-      <CardHeader title="Volume Flow" style={{ backgroundColor: "#39ac73", color: "white" }} />
+      <CardHeader title="Volume Flow (L)" style={{ backgroundColor: "#005580", color: "white" }} />
       <Divider />
       <CardContent>
         <Box

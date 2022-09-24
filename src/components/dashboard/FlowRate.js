@@ -31,6 +31,7 @@ Chart.register(
 export const FlowRate = () => {
   const theme = useTheme();
   const options = {
+    // add label to y axis
     animation: false,
     cornerRadius: 20,
     layout: { padding: 0 },
@@ -64,8 +65,11 @@ export const FlowRate = () => {
           zeroLineBorderDashOffset: [2],
           zeroLineColor: theme.palette.divider,
         },
+
+        // label on they axis
       },
     ],
+
     tooltips: {
       backgroundColor: theme.palette.background.paper,
       bodyFontColor: theme.palette.text.secondary,
@@ -88,7 +92,7 @@ export const FlowRate = () => {
   const [finalData, setFinalData] = React.useState({
     datasets: [
       {
-        backgroundColor: "#003300",
+        backgroundColor: "8233FF",
         barPercentage: 0.5,
         barThickness: 12,
         borderRadius: 4,
@@ -187,7 +191,10 @@ export const FlowRate = () => {
 
   return (
     <Card>
-      <CardHeader title="Flow Rate" style={{ backgroundColor: "#39ac73", color: "white" }} />
+      <CardHeader
+        title="Flow Rate (L/min)"
+        style={{ backgroundColor: "#800080", color: "white" }}
+      />
       <Divider />
       <CardContent>
         <Box

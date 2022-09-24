@@ -4,6 +4,7 @@ import InsertChartIcon from "@mui/icons-material/InsertChartOutlined";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import MoneyIcon from "@mui/icons-material/Money";
+import PeopleIcon from "@mui/icons-material/PeopleOutlined";
 
 export const HourlyVolumeFlow = ({ data: { timeFrame, dataValue } }) => {
   const [stats, setStats] = React.useState({
@@ -26,7 +27,7 @@ export const HourlyVolumeFlow = ({ data: { timeFrame, dataValue } }) => {
     // const dataValue = data.feeds.map((feed) => feed.field1);
     // const timeFrame = data.feeds.map((feed) => feed.created_at);
     //console.log(dataValue);
-    const timeInterval = 60;
+    const timeInterval = 2 * 60;
     for (let i = 0; i < dataValue.length; i++) {
       // if timeframe within 1 hour from current date
       let date = new Date(timeFrame[i]);
@@ -81,12 +82,12 @@ export const HourlyVolumeFlow = ({ data: { timeFrame, dataValue } }) => {
           <Grid item>
             <Avatar
               sx={{
-                backgroundColor: "error.main",
+                backgroundColor: "success.main",
                 height: 56,
                 width: 56,
               }}
             >
-              <MoneyIcon />
+              <PeopleIcon />
             </Avatar>
           </Grid>
         </Grid>

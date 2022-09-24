@@ -94,6 +94,11 @@ export const HourVolFlow = (props) => {
       mode: "index",
       titleFontColor: theme.palette.text.primary,
     },
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
   };
   const [timeRange, setTimeRange] = React.useState({
     // set startTime to 00:00:00 of current day
@@ -113,13 +118,14 @@ export const HourVolFlow = (props) => {
   const filterData = async () => {
     // extract data for that day
     const startTime = timeRange.startTime;
-  //  console.log(startTime);
+    //  console.log(startTime);
     const timeInterval = 60;
     // endTime is one day after startTime
-    const endTime = new Date(startTime.getTime() + 24 * 60 * 60 * 1000);
+    // set end time to two days ahead
+    const endTime = new Date(startTime.getTime() + 1 * 24 * 60 * 60 * 1000);
     // console.log(startTime);
     // console.log(endTime);
-    const url = `https://api.thingspeak.com/channels/1864037/feeds.json?api_key=IVVRQR3FGHLBA96G&start=${startTime.toISOString()}&results=1440&timezone=Asia%2FKolkata`;
+    const url = `https://api.thingspeak.com/channels/1864037/feeds.json?api_key=IVVRQR3FGHLBA96G&start=${startTime.toISOString()}&end=${endTime.toISOString()}&results=1440&timezone=Asia%2FKolkata`;
     const [data1] = await Promise.all([fetch(url)]).then(async ([res]) => {
       const data1 = await res.json();
       return [data1];
@@ -133,6 +139,8 @@ export const HourVolFlow = (props) => {
     }
     for (let i = 0; i < timeFrame.length; i++) {
       let date = new Date(timeFrame[i]);
+      //
+
       let hour = date.getHours();
       if (dataValue[i] === null) continue;
       let value = Number(dataValue[i]);
@@ -141,14 +149,15 @@ export const HourVolFlow = (props) => {
       data[hour] += Number(value);
       // data[hour] = data[hour].toFixed(2);
     }
+
     //console.log(data);
     // set data in datasets
     setData({
       datasets: [
         {
-          backgroundColor: "#3F51B5",
+          backgroundColor: "#ffd699",
           barPercentage: 0.5,
-          barThickness: 40,
+          barThickness: 20,
           borderRadius: 4,
           categoryPercentage: 0.5,
           data: data,
@@ -191,8 +200,8 @@ export const HourVolFlow = (props) => {
   return (
     <Card {...props}>
       <CardHeader
-        title="HOUR-WISE VOLUME "
-        style={{ backgroundColor: "#39ac73", color: "white" }}
+        title="HOUR-WISE VOLUME (L) "
+        style={{ backgroundColor: "#ffa31a", color: "white" }}
       />
       <Divider />
       <CardContent>

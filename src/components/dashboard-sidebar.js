@@ -42,11 +42,11 @@ const items = [
   //   icon: (<CogIcon fontSize="small" />),
   //   title: 'Settings'
   // },
-  // {
-  //   href: '/login',
-  //   icon: (<LockIcon fontSize="small" />),
-  //   title: 'Login'
-  // },
+  {
+    href: "/login",
+    icon: <LockIcon fontSize="small" />,
+    title: "Login",
+  },
   // {
   //   href: '/register',
   //   icon: (<UserAddIcon fontSize="small" />),
@@ -118,13 +118,12 @@ export const DashboardSidebar = (props) => {
             >
               <div>
                 <Typography color="inherit" variant="subtitle1">
-                  Water Flow Monitoring 
+                  Water Flow Monitoring
                 </Typography>
                 <Typography color="neutral.400" variant="body2">
                   Team 7: Vikings
                 </Typography>
               </div>
-           
             </Box>
           </Box>
         </div>

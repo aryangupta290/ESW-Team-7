@@ -4,6 +4,10 @@ import { Avatar, Box, Card, CardContent, Grid, Typography } from "@mui/material"
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import MoneyIcon from "@mui/icons-material/Money";
+// import all the icons
+// import search icon
+import UserIcon from "@mui/icons-material/Search";
+
 
 // take data from index.js
 // so in one query only get all the data hoully wise and calculate the volume

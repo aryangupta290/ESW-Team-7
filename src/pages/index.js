@@ -8,13 +8,10 @@ import { Box, Container, Grid } from "@mui/material";
 // import avgDailyFlowRate from budget.js
 
 import { AvgDailyFlowRate } from "../components/dashboard/avgDailyFlowRate";
-import { LatestOrders } from "../components/dashboard/latest-orders";
-import { LatestProducts } from "../components/dashboard/latest-products";
 import { FlowRate } from "../components/dashboard/FlowRate";
 import { HourlyVolumeFlow } from "../components/dashboard/HourlyVolumeFlow";
 import { CurrentFlowRate } from "../components/dashboard/currentFlowRate";
 import { DailyWaterVolume } from "../components/dashboard/DailyWaterVolume";
-import { TrafficByDevice } from "../components/dashboard/traffic-by-device";
 import { DashboardLayout } from "../components/dashboard-layout";
 import { DayWiseGraph } from "../components/dashboard/DayWisegraph";
 
@@ -27,6 +24,76 @@ const url1 =
   "https://api.thingspeak.com/channels/1864037/feeds.json?api_key=IVVRQR3FGHLBA96G&results=5000";
 
 const Intervalms = 30 * 1000;
+
+let p1 = 1721;
+let p2 = 4999;
+
+function gcd(a, h) {
+  let temp;
+  while (true) {
+    temp = a % h;
+    if (temp == 0) {
+      return h;
+    }
+    a = h;
+    h = temp;
+  }
+}
+
+function addmod(x, y, n) {
+  // Precondition: x<n, y<n
+  // If it will overflow, use alternative calculation
+  if (x + y <= x) x = x - ((n - y) % n);
+  else x = (x + y) % n;
+  return x;
+}
+
+function sqrmod(a, n) {
+  var b;
+  var sum = 0;
+
+  // Make sure original number is less than n
+  a = a % n;
+
+  // Use double and add algorithm to calculate a*a mod n
+  for (b = a; b != 0; b >>= 1) {
+    if (b & 1) {
+      sum = addmod(sum, a, n);
+    }
+    a = addmod(a, a, n);
+  }
+  return sum;
+}
+
+function powFun(base, ex, mo) {
+  var r;
+  if (ex === 0) return 1;
+  else if (ex % 2 === 0) {
+    r = powFun(base, ex / 2, mo) % mo;
+    // return (r * r) % mo;
+    return sqrmod(r, mo);
+  } else return (base * powFun(base, ex - 1, mo)) % mo;
+}
+function getE(p1, p2) {
+  let e = 3;
+  let phi = (p1 - 1) * (p2 - 1);
+  while (e < phi) {
+    if (gcd(e, phi) == 1) break;
+    else e += 1;
+  }
+  return e;
+}
+
+function Decrypt(encrypted_val, p1, p2, e) {
+  let k = 2;
+  let phi = (p1 - 1) * (p2 - 1);
+  while ((1 + k * phi) % e != 0) {
+    k += 1;
+  }
+  let d = (1 + k * phi) / e;
+  return powFun(encrypted_val, d, p1 * p2);
+}
+
 const Dashboard = () => {
   const fetcher = async (url) => await axios.get(url).then((res) => res.data);
   // fetch data from url1
@@ -40,10 +107,15 @@ const Dashboard = () => {
   const formatData = () => {
     const timeFrame = data.feeds.map((feed) => feed.created_at);
     const dataValue = data.feeds.map((feed) => feed.field1);
+    // convert dataValue to number
+    let value = dataValue.map((val) => {
+      return Decrypt(val, p1, p2, getE(p1, p2));
+    });
     //  console.log(dataValue);
     return {
       timeFrame,
       dataValue,
+      value,
     };
   };
 
@@ -51,7 +123,7 @@ const Dashboard = () => {
   return (
     <>
       <Container>
-        <h1> Location : Water Coller at back of Vindhya Canteen</h1>
+        <h1> Location : RO waste pipe at the back of Vindhya Canteen</h1>
       </Container>
       <Head>
         <title>Dashboard | Material Kit</title>

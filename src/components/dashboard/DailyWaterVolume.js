@@ -27,7 +27,7 @@ export const DailyWaterVolume = ({ data: { timeFrame, dataValue } }) => {
     // get dataValue and TimeFrame
     // const dataValue = data.feeds.map((feed) => feed.field1);
     // const timeFrame = data.feeds.map((feed) => feed.created_at);
-    const timeInterval = 60;
+    const timeInterval = 2 * 60;
     for (let i = 0; i < dataValue.length; i++) {
       // if timeframe within 1 day from current date
       let date = new Date(timeFrame[i]);
@@ -71,7 +71,7 @@ export const DailyWaterVolume = ({ data: { timeFrame, dataValue } }) => {
         <Grid container spacing={3} sx={{ justifyContent: "space-between" }}>
           <Grid item>
             <Typography color="textSecondary" gutterBottom variant="overline">
-              DAILY WATER VOLUME WASTAGE
+              WATER WASTAGE DURING LAST DAY
             </Typography>
             <Typography color="textPrimary" variant="h4">
               {stats.dailyWaterVolume} L
