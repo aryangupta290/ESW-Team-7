@@ -32,7 +32,7 @@ export const CurrentFlowRate = ({ data: { timeFrame, dataValue } }) => {
       if (diff < 0) {
         continue;
       }
-      if (diff < 200) {
+      if (diff < 240*1000) {
         currentFlowRate = value;
         break;
       }
