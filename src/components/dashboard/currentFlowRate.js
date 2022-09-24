@@ -3,7 +3,6 @@ import { Avatar, Box, Card, CardContent, Grid, Typography } from "@mui/material"
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import PeopleIcon from "@mui/icons-material/PeopleOutlined";
 
-
 export const CurrentFlowRate = ({ data: { timeFrame, dataValue } }) => {
   const [stats, setStats] = React.useState({
     currentFlowRate: 0,
@@ -19,7 +18,7 @@ export const CurrentFlowRate = ({ data: { timeFrame, dataValue } }) => {
     //   currentFlowRate = 0;
     // }
     let currentFlowRate = 0;
-    for (let i = dataValue.length()-1; i >=0; i--) {
+    for (let i = dataValue.length - 1; i >= 0; i--) {
       // get time difference
       let date = new Date(timeFrame[i]);
       let diff = Date.now() - date.getTime();
@@ -27,12 +26,13 @@ export const CurrentFlowRate = ({ data: { timeFrame, dataValue } }) => {
         continue;
       }
       let value = Number(dataValue[i]);
+      console.log(value);
 
       value = (value * 60) / 1000;
       if (diff < 0) {
         continue;
       }
-      if (diff < 240*1000) {
+      if (diff < 240 * 1000) {
         currentFlowRate = value;
         break;
       }
