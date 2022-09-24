@@ -19,7 +19,7 @@ export const CurrentFlowRate = ({ data: { timeFrame, dataValue } }) => {
     //   currentFlowRate = 0;
     // }
     let currentFlowRate = 0;
-    for (let i = 0; i < dataValue.length; i++) {
+    for (let i = dataValue.length()-1; i >=0; i--) {
       // get time difference
       let date = new Date(timeFrame[i]);
       let diff = Date.now() - date.getTime();
@@ -36,8 +36,6 @@ export const CurrentFlowRate = ({ data: { timeFrame, dataValue } }) => {
         currentFlowRate = value;
         break;
       }
-
-      break;
     }
     setStats({
       currentFlowRate: currentFlowRate,
