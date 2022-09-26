@@ -125,7 +125,7 @@ export const HourVolFlow = (props) => {
     const endTime = new Date(startTime.getTime() + 1 * 24 * 60 * 60 * 1000);
     // console.log(startTime);
     // console.log(endTime);
-    const url = `https://api.thingspeak.com/channels/1864037/feeds.json?api_key=IVVRQR3FGHLBA96G&start=${startTime.toISOString()}&end=${endTime.toISOString()}&results=1440&timezone=Asia%2FKolkata`;
+    const url = `https://api.thingspeak.com/channels/"channel_id"/feeds.json?api_key="read_api_key"&start=${startTime.toISOString()}&end=${endTime.toISOString()}&results=1440&timezone=Asia%2FKolkata`;
     const [data1] = await Promise.all([fetch(url)]).then(async ([res]) => {
       const data1 = await res.json();
       return [data1];

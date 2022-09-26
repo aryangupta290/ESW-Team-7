@@ -21,7 +21,7 @@ import { VolFlow } from "../components/dashboard/volFlow";
 import { HourVolFlow } from "../components/dashboard/HourWiseGraph";
 import { format } from "date-fns";
 const url1 =
-  "https://api.thingspeak.com/channels/1864037/feeds.json?api_key=IVVRQR3FGHLBA96G&results=5000";
+  "https://api.thingspeak.com/channels/"channel_id"/feeds.json?api_key="read_api_key"&results=5000";
 
 const Intervalms = 30 * 1000;
 

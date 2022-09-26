@@ -151,7 +151,7 @@ export const FlowRate = () => {
     // get data from start and end time
     // in url get the data from start to end time
     // const url = `http://localhost:3000/api/flowrate?start=${timeRange.startTime.toISOString()}&end=${timeRange.endTime.toISOString()}`;
-    const url = `https://api.thingspeak.com/channels/1864037/feeds.json?api_key=IVVRQR3FGHLBA96G&average=10&start=${timeRange.startTime.toISOString()}&end=${timeRange.endTime.toISOString()}`;
+    const url = `https://api.thingspeak.com/channels/"channel_id"/feeds.json?api_key="read_api_key"&average=10&start=${timeRange.startTime.toISOString()}&end=${timeRange.endTime.toISOString()}`;
     const [data1] = await Promise.all([fetch(url)]).then(async ([res]) => {
       const data1 = await res.json();
       return [data1];
